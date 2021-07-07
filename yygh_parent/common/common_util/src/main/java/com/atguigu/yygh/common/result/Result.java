@@ -24,8 +24,10 @@ public class Result<T> {
 
     protected static <T> Result<T> build(T data) {
         Result<T> result = new Result<T>();
-        if (data != null)
+        if (data != null){
             result.setData(data);
+        }
+
         return result;
     }
 
