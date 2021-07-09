@@ -6,6 +6,7 @@
         <module>common</module>
         <module>model</module>
         <module>service</module>
+        <module>service-client</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -39,6 +40,7 @@
     <!--配置dependencyManagement锁定依赖的版本-->
     <dependencyManagement>
         <dependencies>
+
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
