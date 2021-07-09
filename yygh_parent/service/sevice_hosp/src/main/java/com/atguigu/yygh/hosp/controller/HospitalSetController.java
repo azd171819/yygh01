@@ -16,6 +16,7 @@ import javax.servlet.http.PushBuilder;
 import java.util.List;
 import java.util.Random;
 
+//医院设置
 @CrossOrigin
 @RestController
 @RequestMapping("/admin/hosp/hospitalSet")
