@@ -9,6 +9,21 @@ import java.util.Map;
 public interface HospitalService {
 
     /**
+     * 医院详情
+     * @param id
+     * @return
+     */
+    Map<String, Object> show(String id);
+
+
+
+    /**
+     * 更新上线状态
+     */
+    void updateStatus(String id, Integer status);
+
+
+    /**
      * 上传医院信息
      * @param paramMap
      */

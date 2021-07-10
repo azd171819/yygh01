@@ -1,6 +1,8 @@
 package com.atguigu.yygh.hosp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.atguigu.yygh.client.DictFeignClient;
+import com.atguigu.yygh.enums.DictEnum;
 import com.atguigu.yygh.hosp.repository.HospitalRepository;
 import com.atguigu.yygh.hosp.service.HospitalService;
 import com.atguigu.yygh.model.hosp.Hospital;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -20,6 +23,36 @@ public class HospitalServiceImpl implements HospitalService {
 
     @Autowired
     private HospitalRepository hospitalRepository;
+
+    @Autowired
+    private DictFeignClient dictFeignClient;
+
+
+    @Override
+    public Map<String, Object> show(String id) {
+        Map<String, Object> result = new HashMap<>();
+        Hospital hospital = this.packHospital(hospitalRepository.findById(id).get());
+
+        result.put("hospital", hospital);
+        //单独处理更直观
+        result.put("bookingRule", hospital.getBookingRule());
+        //不需要重复返回
+        hospital.setBookingRule(null);
+        return result;
+    }
+
+
+
+    @Override
+    public void updateStatus(String id, Integer status) {
+        if(status.intValue() == 0 || status.intValue() == 1) {
+            Hospital hospital = hospitalRepository.findById(id).get();
+            hospital.setStatus(status);
+            hospital.setUpdateTime(new Date());
+            hospitalRepository.save(hospital);
+        }
+    }
+
 
     /**
      *
@@ -88,8 +121,30 @@ public class HospitalServiceImpl implements HospitalService {
         Example<Hospital> example = Example.of(hospital, matcher);
         Page<Hospital> pages = hospitalRepository.findAll(example, pageable);
 
+        pages.getContent().stream().forEach(item -> {
+            this.packHospital(item);
+        });
+
         return pages;
     }
+
+
+    /**
+     * 封装数据
+     * @param hospital
+     * @return
+     */
+    private Hospital packHospital(Hospital hospital) {
+        String hostypeString = dictFeignClient.getName(DictEnum.HOSTYPE.getDictCode(),hospital.getHostype());
+        String provinceString = dictFeignClient.getName(hospital.getProvinceCode());
+        String cityString = dictFeignClient.getName(hospital.getCityCode());
+        String districtString = dictFeignClient.getName(hospital.getDistrictCode());
+
+        hospital.getParam().put("hostypeString", hostypeString);
+        hospital.getParam().put("fullAddress", provinceString + cityString + districtString + hospital.getAddress());
+        return hospital;
+    }
+
 
 
 }
