@@ -12,7 +12,7 @@
     <modules>
         <module>service_user</module>
         <module>sevice_hosp</module>
-        <module>service_cmn</module>
+<!--        <module>service_cmn</module>-->
     </modules>
 
     <artifactId>service</artifactId>
@@ -23,6 +23,19 @@
     </properties>
 
     <dependencies>
+
+        <!-- 服务调用feign -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- 服务注册 nacos -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.atguigu</groupId>
             <artifactId>model</artifactId>
@@ -52,6 +65,7 @@
             <artifactId>model</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
 
 <!--        <dependency>-->
 <!--            <groupId>com.atguigu</groupId>-->
@@ -84,11 +98,9 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
-<!--        &lt;!&ndash; 服务调用feign &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-openfeign</artifactId>-->
-<!--        </dependency>-->
+
+
+
 <!--        &lt;!&ndash; 服务注册 &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>com.alibaba.cloud</groupId>-->
@@ -99,6 +111,21 @@
              <groupId>com.alibaba.cloud</groupId>
              <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
          </dependency>-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+
     </dependencies>
     <build>
         <plugins>
