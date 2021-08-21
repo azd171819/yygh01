@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.atguigu.yygh.client.DictFeignClient;
 import com.atguigu.yygh.enums.DictEnum;
 import com.atguigu.yygh.hosp.repository.HospitalRepository;
+import com.atguigu.yygh.hosp.service.DepartmentService;
 import com.atguigu.yygh.hosp.service.HospitalService;
 import com.atguigu.yygh.model.hosp.Hospital;
 import com.atguigu.yygh.vo.hosp.HospitalQueryVo;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -26,6 +28,36 @@ public class HospitalServiceImpl implements HospitalService {
 
     @Autowired
     private DictFeignClient dictFeignClient;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+
+
+    @Override
+    public Map<String, Object> item(String hoscode) {
+        Map<String, Object> result = new HashMap<>();
+        //医院详情
+        Hospital hospital = this.getByHospcode(this.getName(hoscode));
+        result.put("hospital", hospital);
+        //预约规则
+        result.put("bookingRule", hospital.getBookingRule());
+        //不需要重复返回
+        hospital.setBookingRule(null);
+        return result;
+    }
+
+
+
+    @Override
+    public String getName(String hoscode) {
+        Hospital hospital = hospitalRepository.getHospitalByHoscode(hoscode);
+        if(null != hospital) {
+            return hospital.getHosname();
+        }
+        return "";
+    }
+
 
 
     @Override
@@ -144,6 +176,13 @@ public class HospitalServiceImpl implements HospitalService {
         hospital.getParam().put("fullAddress", provinceString + cityString + districtString + hospital.getAddress());
         return hospital;
     }
+
+    @Override
+    public List<Hospital> findByHosname(String hosname) {
+        return hospitalRepository.findHospitalByHosnameLike(hosname);
+    }
+
+
 
 
 

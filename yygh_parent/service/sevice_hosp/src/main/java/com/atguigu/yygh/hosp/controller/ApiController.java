@@ -14,13 +14,12 @@ import com.atguigu.yygh.vo.hosp.DepartmentQueryVo;
 import com.atguigu.yygh.vo.hosp.ScheduleQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 import org.springframework.web.HttpRequestHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -40,6 +39,25 @@ public class ApiController {
     private DepartmentService departmentService;
     @Autowired
     private HospitalSetService hospitalSetService;
+
+
+    @ApiOperation(value = "获取科室列表")
+    @GetMapping("department/{hoscode}")
+    public Result index(
+            @ApiParam(name = "hoscode", value = "医院code", required = true)
+            @PathVariable String hoscode) {
+        return Result.ok(departmentService.findDeptTree(hoscode));
+    }
+
+    @ApiOperation(value = "医院预约挂号详情")
+    @GetMapping("{hoscode}")
+    public Result item(
+            @ApiParam(name = "hoscode", value = "医院code", required = true)
+            @PathVariable String hoscode) {
+        return Result.ok(hospitalService.item(hoscode));
+    }
+
+
 
 
     @ApiOperation(value = "医院上传")
